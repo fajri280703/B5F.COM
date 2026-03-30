@@ -3,306 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B5F</title>
+    <title>Corelink.id</title>
+    <link rel="icon" type="image/png" href="ChatGPT Image Mar 30, 2026, 03_34_43 PM.png">
     
-    <!-- Google Fonts (Font Modern) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="FAJRI MUNAWAR (4).png">
-
     <style>
-        /* Variabel Warna untuk Tema yang Konsisten */
+        /* --- 1. PENGATURAN UMUM & VARIABEL --- */
         :root {
-            --bg-color: #121212; /* Abu-abu gelap */
-            --surface-color: #1e1e1e; /* Sedikit lebih terang */
-            --primary-color: #00bcd4; /* Cyan/Biru Muda */
-            --text-color: #ffffff;
-            --text-secondary: #b0b0b0;
-            --border-color: #333333;
+            --bg-dark: #121212;
+            --bg-card: #242425;
+            --accent: #00bcd4;
+            --text-main: #e5ff00;
+            --text-sec: #ffffff;
+            --border-color: #333;
         }
 
-        /* 1. RESET & STYLE DASAR */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-color);
-            font-family: 'Poppins', sans-serif; /* Font Modern */
-            color: var(--text-color);
+            background-color: var(--bg-dark);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
             height: 100vh;
-            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Mencegah scroll pada body */
+        }
+
+        /* --- 2. HEADER --- */
+        header {
+            width: 100%;
+            height: 60px;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
             overflow: hidden;
+            position: relative;
+            z-index: 500;
+            flex-shrink: 0; /* Header tidak akan mengecil */
+        }
+
+        .marquee-content {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            position: absolute;
+            animation: slideLeft 18s linear infinite;
+        }
+
+        .marquee-img { height: 40px; width: auto; margin-right: 15px; }
+        .marquee-text { font-size: 1.1rem; color: var(--text-sec); font-weight: 500; }
+
+        @keyframes slideLeft {
+            from { transform: translateX(100vw); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* --- 3. AREA UTAMA (MAIN) --- */
+        main {
+            flex: 1; /* Mengambil sisa ruang tersedia */
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
+            padding: 20px;
+            overflow: hidden;
         }
 
-        /* 2. GRID UTAMA */
-        .grid-wrapper {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
+        /* Container untuk mengatur posisi grid dan logo */
+        .content-wrapper {
+            position: relative;
             width: 90%;
-            height: 90%;
-            max-width: 1200px;
-            max-height: 800px;
-            gap: 20px; /* Jarak antar kotak */
-            position: relative;
-            z-index: 1;
+            max-width: 1000px;
+            height: 85%;
+            max-height: 600px;
         }
 
-        /* 3. ITEM (KOTak) */
-        .item {
-            position: relative;
-            border-radius: 15px; /* Sudut melengkung */
+        /* Grid untuk kotak-kotak */
+        .grid-wrapper {
+            position: absolute;
+            inset: 0; /* Mengisi seluruh area .content-wrapper */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 25px; /* Jarak yang lebih seimbang antar kotak */
+        }
+
+        /* --- 4. KOTAK KARTU & LOGO TENGAH --- */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 10px; /* Sedikit lebih bulat untuk kesan modern */
             overflow: hidden;
             cursor: pointer;
-            background-color: var(--surface-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
-        /* Efek Hover pada Item */
-        .item:hover {
-            transform: translateY(-5px); /* Bergerak sedikit ke atas */
-            box-shadow: 0 8px 25px rgba(0, 188, 212, 0.3); /* Bayangan berwarna */
-        }
-
-        /* Overlay untuk Efek Hover */
-        .item::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(0, 188, 212, 0.4), rgba(0, 188, 212, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 2;
-        }
-
-        .item:hover::after {
-            opacity: 1;
-        }
-
-        /* GAMBAR */
-        .item-image {
+        
+        .card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            display: block;
+            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
-        .item:hover .item-image {
-            transform: scale(1.1); /* Gambar membesar saat hover */
+        .card:hover {
+            transform: scale(1.03);
+            border-color: var(--accent);
+            z-index: 2;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        }
+        
+        .card:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.1);
         }
 
-        /* =========================================
-           4. LINGKARAN LOGO TENGAH (BISA DIKLIK)
-           ========================================= */
-        .center-logo-container {
+        .center-logo {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
+            width: 220px; /* Ukuran yang lebih seimbang */
+            height: 220px;
+            background-color: var(--bg-card);
+            border: 6px solid var(--accent);
             border-radius: 50%;
             z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            border: 5px solid var(--bg-color);
-            box-shadow: 0 0 0 5px var(--primary-color), 0 10px 30px rgba(0, 188, 212, 0.5);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background-color: var(--surface-color);
+            box-shadow: 0 0 30px rgba(0, 188, 212, 0.6);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
         }
 
-        /* Efek Hover pada Logo Tengah */
-        .center-logo-container:hover {
-            transform: translate(-50%, -50%) scale(1.05);
-            box-shadow: 0 0 0 5px var(--primary-color), 0 15px 40px rgba(0, 188, 212, 0.7);
+        .center-logo:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 40px rgba(0, 188, 212, 0.8);
         }
 
-        .center-logo-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .center-logo img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+            border-radius: 50%;
         }
 
-        /* =========================================
-           5. MODAL POP-UP (DESAIN BARU)
-           ========================================= */
+        /* --- 5. MODAL --- */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px); /* Efek blur pada background */
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
         }
-
-        .modal-content {
-            background-color: var(--surface-color);
-            margin: 10% auto;
-            padding: 50px;
-            border: 1px solid var(--border-color);
-            width: 90%;
-            max-width: 500px;
+        .modal-box {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--accent);
             text-align: center;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            animation: slideIn 0.4s ease-out;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            animation: zoomIn 0.3s;
         }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .modal-content h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, var(--primary-color), #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .modal-content p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
-
-        .close {
-            color: var(--text-secondary);
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 35px;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: var(--primary-color);
-            cursor: pointer;
-        }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; }}
+        .close-modal { position: absolute; top: 10px; right: 20px; font-size: 28px; cursor: pointer; color: #fff; }
+        .close-modal:hover { color: var(--accent); }
         
-        /* 6. RESPONSIVE UNTUK HP */
-        @media (max-width: 768px) {
-            .grid-wrapper {
-                grid-template-columns: 1fr;
-                grid-template-rows: repeat(4, 1fr);
-                gap: 15px;
-                width: 95%;
-                height: 95%;
-            }
-            .center-logo-container {
-                width: 120px;
-                height: 120px;
-                border-width: 3px;
-                box-shadow: 0 0 0 3px var(--primary-color), 0 5px 15px rgba(0, 188, 212, 0.4);
-            }
-            .modal-content {
-                padding: 30px;
-                margin: 30% auto;
-            }
-            .modal-content h1 {
-                font-size: 2rem;
-            }
+        /* --- 6. FOOTER --- */
+        footer {
+            width: 100%;
+            height: 50px;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0; /* Footer tidak akan mengecil */
+            padding: 0 15px;
         }
 
+        footer p {
+            color: var(--text-sec);
+            font-size: 0.9rem;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* --- 7. RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                height: 80%;
+                max-height: 550px;
+            }
+            .center-logo { width: 180px; height: 180px; }
+        }
+
+        @media (max-width: 768px) {
+            header { height: 50px; }
+            .marquee-img { height: 30px; }
+            .marquee-text { font-size: 0.9rem; }
+            
+            main { padding: 15px; }
+            
+            .content-wrapper {
+                position: relative;
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .grid-wrapper {
+                position: relative;
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .card { height: 120px; }
+
+            /* Logo pindah ke atas pada tampilan mobile */
+            .center-logo {
+                position: relative;
+                top: auto; left: auto;
+                transform: none;
+                width: 120px; height: 120px;
+                margin-bottom: 20px;
+                border-width: 4px;
+            }
+            .center-logo:hover { transform: scale(1.1); }
+
+            footer { height: 40px; }
+            footer p { font-size: 0.75rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="grid-wrapper">
-        <!-- UNEVRAS -->
-        <div class="item" onclick="showModal('UNEVRAS')">
-            <img src="Bold yellow text on white background.png" alt="Unevras" class="item-image">
+    <!-- HEADER -->
+    <header>
+        <div class="marquee-content">
+            <img src="ChatGPT Image Mar 30, 2026, 03_34_43 PM.png" alt="Logo" class="marquee-img">
+            <span class="marquee-text">Selamat datang di Corelink.id, pusat penghubung utama yang mengintegrasikan seluruh sistem dalam satu akses terpadu.</span>
         </div>
+    </header>
 
-        <!-- KONEKDA -->
-        <div class="item" onclick="showModal('KONEKDA')">
-            <img src="ChatGPT Image Mar 29, 2026, 01_03_17 AM.png" alt="Konekda" class="item-image">
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="content-wrapper">
+            <!-- KOTAK-KOTAK (GRID) -->
+            <div class="grid-wrapper">
+                <div class="card" onclick="openModal('UNEVRAS')">
+                    <img src="Bold yellow text on white background.png" alt="Unevras">
+                </div>
+                <div class="card" onclick="openModal('KONEKDA')">
+                    <img src="ChatGPT Image Mar 29, 2026, 01_03_17 AM.png" alt="Konekda">
+                </div>
+                <div class="card" onclick="openModal('ARVIS')">
+                    <img src="ChatGPT Image 29 Mar 2026, 00.15.36.png" alt="Arvis">
+                </div>
+                <div class="card" onclick="openModal('GARTARA')">
+                    <img src="ChatGPT Image 29 Mar 2026, 16.25.26.png" alt="Gartara">
+                </div>
+            </div>
+
+            <!-- LOGO LINGKARAN (FIX DI TENGAH) -->
+            <div class="center-logo" onclick="openModal('JRI MUNAWAR GROUP')">
+                <img src="WhatsApp Image 2026-03-04 at 16.57.28.jpeg" alt="Logo JRI">
+            </div>
         </div>
+    </main>
 
-        <!-- AEVIS -->
-        <div class="item" onclick="showModal('AEVIS')">
-            <img src="ChatGPT Image 29 Mar 2026, 00.15.36.png" alt="Aevis" class="item-image">
-        </div>
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2024 Corelink.id - Hak Cipta Dilindungi | Dikembangkan oleh Fajri Munawar</p>
+    </footer>
 
-        <!-- GARTASA -->
-        <div class="item" onclick="showModal('GARTARA')">
-            <img src="ChatGPT Image 29 Mar 2026, 16.25.26.png" alt="Gartasa" class="item-image">
-        </div>
-    </div>
-
-    <!-- LINGKARAN LOGO DI TENGAH (SUDAH BISA DIKLIK) -->
-    <div class="center-logo-container" onclick="showModal('JRI MUNAWAR GROUP')">
-        <img src="WhatsApp Image 2026-03-04 at 16.57.28.jpeg" alt="Logo B5F" class="center-logo-img">
-    </div>
-
-    <!-- POP-UP MODAL -->
-    <div id="modalPopup" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="hideModal()">&times;</span>
-            <h1 id="modal-title">COMING SOON</h1>
-            <p id="modal-text">Halaman ini sedang dalam pembangunan tidak lama lagi.</p>
+    <!-- MODAL -->
+    <div id="modalOverlay" class="modal">
+        <div class="modal-box">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="mTitle" style="color:var(--accent); margin-bottom:10px;">Judul</h2>
+            <p id="mDesc" style="color:#bbb;">Keterangan</p>
         </div>
     </div>
 
     <script>
-        // Fungsi untuk menampilkan modal dengan pesan dinamis
-        function showModal(brand) {
-            const modal = document.getElementById("modalPopup");
-            const title = document.getElementById("modal-title");
-            const text = document.getElementById("modal-text");
-
-            if (brand === 'JRI MUNAWAR GROUP') {
-                title.textContent = "JRI MUNAWAR GROUP";
-                text.textContent = "Pintu gerbang kami sedang dalam pembangunan. Segera hadir tidak lama lag!";
-            } else {
-                title.textContent = brand + " - COMING SOON";
-                text.textContent = "Halaman untuk " + brand + " sedang dalam pengembangan website nya.";
-            }
-
-            modal.style.display = "block";
+        function openModal(title) {
+            const modal = document.getElementById('modalOverlay');
+            document.getElementById('mTitle').innerText = title;
+            document.getElementById('mDesc').innerText = title === 'JRI MUNAWAR GROUP' 
+                ? "Pusat grup kami sedang dalam pengembangan." 
+                : "Halaman " + title + " akan segera hadir.";
+            modal.style.display = 'flex';
         }
-
-        // Fungsi untuk menyembunyikan modal
-        function hideModal() {
-            document.getElementById("modalPopup").style.display = "none";
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
         }
-
-        // Menutup modal jika pengguna mengklik di luar area modal
-        window.onclick = function(event) {
-            const modal = document.getElementById("modalPopup");
-            if (event.target == modal) {
-                hideModal();
-            }
+        // Tutup modal jika klik di luar kotak modal
+        window.onclick = function(e) {
+            if (e.target == document.getElementById('modalOverlay')) closeModal();
         }
     </script>
-
 </body>
 </html>
