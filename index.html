@@ -26,7 +26,6 @@
             background-color: var(--bg-dark);
             font-family: 'Poppins', sans-serif;
             color: var(--text-main);
-            /* PENTING: Kunci tinggi layar dan hilangkan scroll utama */
             height: 100vh;
             width: 100vw;
             display: flex;
@@ -37,15 +36,15 @@
         /* --- 2. HEADER --- */
         header {
             width: 100%;
-            height: 60px; /* Tinggi tetap */
+            height: 60px;
             background-color: var(--bg-card);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            overflow: hidden;
+            overflow: hidden; /* Penting agar teks di luar layar tidak terlihat */
             position: relative;
             z-index: 500;
-            flex-shrink: 0; /* Supaya header tidak mengecil */
+            flex-shrink: 0; 
         }
 
         .marquee-content {
@@ -53,39 +52,63 @@
             align-items: center;
             white-space: nowrap;
             position: absolute;
-            animation: slideLeft 18s linear infinite;
+            /* Mulai dari pojok KANAN layar */
+            left: 100%;
+            /* Kecepatan 12 detik (cepat tapi tidak kelihatan lama) */
+            animation: slideLeft 34s linear infinite;
         }
 
-        .marquee-img { height: 40px; width: auto; margin-right: 15px; }
-        .marquee-text { font-size: 1.1rem; color: var(--text-sec); font-weight: 500; }
+        .marquee-img { height: 35px; width: auto; margin-right: 15px; flex-shrink: 0; }
+        
+        .marquee-text { 
+            font-size: 0.95rem; 
+            color: var(--text-sec); 
+            font-weight: 500; 
+        }
+        
+        .separator {
+            margin: 0 15px;
+            color: var(--accent);
+            font-weight: bold;
+        }
 
+        .marquee-copyright {
+            font-size: 0.85rem;
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        /* ANIMASI DIPERBAIKI */
         @keyframes slideLeft {
-            from { transform: translateX(100vw); }
-            to { transform: translateX(-100%); }
+            /* Posisi Awal: Di Kanan (0 relatif terhadap left: 100%) */
+            0% {
+                transform: translateX(0);
+            }
+            /* Posisi Akhir: Geser ke kiri sejauh lebar layar + lebar teks.
+               -100vw (lebar layar) - 100% (lebar teks) agar benar-benar habis keluar. */
+            100% {
+                transform: translateX(calc(-100vw - 100%));
+            }
         }
 
         /* --- 3. AREA UTAMA (MAIN) --- */
         main {
-            /* PENTING: Area ini mengambil sisa ruang, TANPA scroll */
             flex: 1; 
             display: flex;
             justify-content: center;
             align-items: center; 
-            padding: 10px; /* Padding kecil agar tidak mepet pinggir */
-            overflow: hidden; /* Hilangkan scroll di sini */
+            padding: 10px;
+            overflow: hidden;
             width: 100%;
-            min-height: 0; /* Agar item di dalam bisa mengecil (shrink) */
+            min-height: 0;
         }
 
-        /* --- 4. TATA LETAK DESKTOP (FULL LAYAR) --- */
+        /* --- 4. TATA LETAK DESKTOP --- */
         .content-wrapper {
             position: relative;
-            /* Lebar maksimal tapi fleksibel */
             width: 90%;
             max-width: 1000px;
-            /* PENTING: Gunakan aspect ratio agar kotak proporsional */
             aspect-ratio: 16 / 9; 
-            /* Tinggi maksimal disesuaikan dengan ruang main yang tersisa */
             max-height: 100%;
             margin: auto;
         }
@@ -137,7 +160,6 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            /* Logo menyesuaikan ukuran wrapper */
             width: 22%; 
             aspect-ratio: 1/1; 
             background-color: var(--bg-card);
@@ -191,68 +213,37 @@
         
         /* --- 6. FOOTER --- */
         footer {
-            width: 100%;
-            height: 50px; /* Tinggi tetap */
-            background-color: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0; /* Supaya footer tidak mengecil */
-            padding: 0 15px;
+            display: none;
         }
 
-        footer p {
-            color: var(--text-sec);
-            font-size: 0.9rem;
-            text-align: center;
-            margin: 0;
-            white-space: nowrap; /* Teks footer tidak turun baris */
-        }
-
-        /* --- 7. RESPONSIVE (HP & TABLET) --- */
-        /* PERUBAHAN: Di sini saya tidak mengubah jadi kolom (vertical) lagi karena itu bikin scroll. */
-        /* Saya mempertahankan GRID agar muat di 1 layar, tapi mengecilkan ukurannya. */
+        /* --- 7. RESPONSIVE --- */
         @media (max-width: 992px) {
             header { height: 50px; }
-            .marquee-img { height: 30px; }
-            .marquee-text { font-size: 0.85rem; }
+            .marquee-img { height: 25px; margin-right: 10px; }
+            .marquee-text { font-size: 0.8rem; }
+            .marquee-copyright { font-size: 0.75rem; }
             
-            footer { height: 40px; }
-            footer p { font-size: 0.7rem; }
-
-            /* Wrapper tetap proporsional 16:9 tapi mengambil lebar penuh yang tersedia */
             .content-wrapper {
                 width: 95%; 
-                aspect-ratio: 16 / 9; /* Paksa tetap kotak lebar, jadi ada ruang samping di HP agar muat tinggi */
+                aspect-ratio: 16 / 9;
                 max-height: 100%;
-                padding: 0;
             }
 
-            /* Grid tetap 2x2 agar muat di layar pendek */
             .grid-wrapper {
-                gap: 10px; /* Jarak dikurangi agar muat */
+                gap: 10px;
                 padding: 5px;
             }
 
-            /* Logo mengecil proporsional */
             .center-logo {
-                width: 25%; /* Sedikit lebih besar relatif terhadap wrapper yang mengecil */
+                width: 25%;
                 border-width: 3px;
             }
         }
 
         @media (max-width: 600px) {
-            /* Untuk HP sangat kecil, kita perkecil lagi elemennya */
-            .content-wrapper {
-                width: 98%;
-            }
-            .grid-wrapper {
-                gap: 5px;
-            }
-            .center-logo {
-                width: 28%;
-            }
+            .content-wrapper { width: 98%; }
+            .grid-wrapper { gap: 5px; }
+            .center-logo { width: 28%; }
         }
     </style>
 </head>
@@ -261,9 +252,17 @@
     <!-- HEADER -->
     <header>
         <div class="marquee-content">
-            <!-- Pastikan gambar ada atau ganti dengan placeholder jika tidak muncul -->
+            <!-- Logo Kecil -->
             <img src="ChatGPT Image Mar 30, 2026, 03_34_43 PM.png" onerror="this.style.display='none'" alt="Logo" class="marquee-img">
-            <span class="marquee-text">Selamat datang di Corelink.id, pusat penghubung utama yang mengintegrasikan seluruh sistem dalam satu akses terpadu.© 2026 Corelink.id - Hak Cipta Dilindungi | Dikembangkan oleh Fajri Munawar</span>
+            
+            <!-- Teks Sambutan -->
+            <span class="marquee-text">Selamat datang di Corelink.id, pusat penghubung utama yang mengintegrasikan seluruh sistem dalam satu akses terpadu.</span>
+            
+            <!-- Pemisah -->
+            <span class="separator">|</span>
+            
+            <!-- Teks Hak Cipta -->
+            <span class="marquee-copyright">© 2026 Corelink.id - Hak Cipta Dilindungi | Dikembangkan oleh Fajri Munawar</span>
         </div>
     </header>
 
@@ -293,7 +292,7 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+    <!-- FOOTER (Hidden) -->
     <footer>
         <p>© 2026 Corelink.id - Hak Cipta Dilindungi | Dikembangkan oleh Fajri Munawar</p>
     </footer>
@@ -319,7 +318,6 @@
         function closeModal() {
             document.getElementById('modalOverlay').style.display = 'none';
         }
-        // Tutup modal jika klik di luar kotak modal
         window.onclick = function(e) {
             if (e.target == document.getElementById('modalOverlay')) closeModal();
         }
