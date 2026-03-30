@@ -29,7 +29,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Mencegah scroll pada body */
+            overflow: hidden; /* Mencegah seluruh halaman ber-scroll */
         }
 
         /* --- 2. HEADER --- */
@@ -43,7 +43,7 @@
             overflow: hidden;
             position: relative;
             z-index: 500;
-            flex-shrink: 0; /* Header tidak akan mengecil */
+            flex-shrink: 0;
         }
 
         .marquee-content {
@@ -67,34 +67,34 @@
             flex: 1; /* Mengambil sisa ruang tersedia */
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow: hidden;
+            align-items: flex-start; /* Konten mulai dari atas */
+            padding: 0;
+            overflow-y: auto; /* Area ini yang bisa di-scroll */
         }
 
-        /* Container untuk mengatur posisi grid dan logo */
+        /* --- 4. TATA LETAK DESKTOP (DEFAULT) --- */
         .content-wrapper {
             position: relative;
             width: 90%;
             max-width: 1000px;
             height: 85%;
             max-height: 600px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        /* Grid untuk kotak-kotak */
         .grid-wrapper {
             position: absolute;
-            inset: 0; /* Mengisi seluruh area .content-wrapper */
+            inset: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 25px; /* Jarak yang lebih seimbang antar kotak */
+            gap: 25px;
         }
 
-        /* --- 4. KOTAK KARTU & LOGO TENGAH --- */
         .card {
             background-color: var(--bg-card);
-            border-radius: 10px; /* Sedikit lebih bulat untuk kesan modern */
+            border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
             border: 1px solid var(--border-color);
@@ -129,7 +129,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 220px; /* Ukuran yang lebih seimbang */
+            width: 220px;
             height: 220px;
             background-color: var(--bg-card);
             border: 6px solid var(--accent);
@@ -155,7 +155,7 @@
             border-radius: 50%;
         }
 
-        /* --- 5. MODAL --- */
+        /* --- 5. MODAL (TANPA DELAY/ANIMASI) --- */
         .modal {
             display: none;
             position: fixed;
@@ -176,9 +176,8 @@
             max-width: 400px;
             position: relative;
             box-shadow: 0 0 30px rgba(0,0,0,0.7);
-            animation: zoomIn 0.3s;
+            /* Animasi dihapus agar instan */
         }
-        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; }}
         .close-modal { position: absolute; top: 10px; right: 20px; font-size: 28px; cursor: pointer; color: #fff; }
         .close-modal:hover { color: var(--accent); }
         
@@ -191,7 +190,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-shrink: 0; /* Footer tidak akan mengecil */
+            flex-shrink: 0;
             padding: 0 15px;
         }
 
@@ -202,53 +201,61 @@
             margin: 0;
         }
 
-        /* --- 7. RESPONSIVE DESIGN --- */
-        @media (max-width: 1024px) {
-            .content-wrapper {
-                height: 80%;
-                max-height: 550px;
+        /* --- 7. TATA LETAK UNTUK TABLET & HP (RAPIH, TERTATA, TANPA OVERLAP) --- */
+        @media (max-width: 992px) {
+            main {
+                padding: 0;
             }
-            .center-logo { width: 180px; height: 180px; }
-        }
 
-        @media (max-width: 768px) {
-            header { height: 50px; }
-            .marquee-img { height: 30px; }
-            .marquee-text { font-size: 0.9rem; }
-            
-            main { padding: 15px; }
-            
+            /* Wrapper menjadi wadah vertikal yang rapi */
             .content-wrapper {
                 position: relative;
                 width: 100%;
-                height: auto;
+                height: auto; /* Tinggi mengikuti konten */
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                padding: 25px 20px; /* Jarak dalam yang nyaman */
+                max-width: none; /* Lebar penuh di mobile */
+                margin: 0;
             }
 
+            /* Logo di bagian paling atas */
+            .center-logo {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+                width: 160px;
+                height: 160px;
+                margin-bottom: 30px; /* Jarak yang jelas ke konten di bawah */
+                border-width: 5px;
+                flex-shrink: 0; /* Mencegah logo mengecil */
+            }
+            .center-logo:hover { transform: scale(1.05); }
+
+            /* Grid berubah menjadi tumpukan kartu yang rapi */
             .grid-wrapper {
                 position: relative;
                 width: 100%;
                 height: auto;
                 display: flex;
                 flex-direction: column;
-                gap: 15px;
+                gap: 20px; /* Jarak antar kartu yang sehat */
+                max-width: 500px; /* Maksimal lebar agar tidak terlalu lebar di tablet landscape */
             }
 
-            .card { height: 120px; }
-
-            /* Logo pindah ke atas pada tampilan mobile */
-            .center-logo {
-                position: relative;
-                top: auto; left: auto;
-                transform: none;
-                width: 120px; height: 120px;
-                margin-bottom: 20px;
-                border-width: 4px;
+            /* Kartu dengan bentuk yang konsisten menggunakan aspect-ratio */
+            .card {
+                width: 100%;
+                height: auto; /* Tinggi diatur oleh aspect-ratio */
+                aspect-ratio: 16 / 9; /* Membuat semua kartu memiliki rasio yang sama, sangat rapi */
             }
-            .center-logo:hover { transform: scale(1.1); }
 
+            /* Header dan Footer sedikit lebih kecil */
+            header { height: 50px; }
+            .marquee-img { height: 30px; }
+            .marquee-text { font-size: 0.9rem; }
             footer { height: 40px; }
             footer p { font-size: 0.75rem; }
         }
@@ -267,6 +274,11 @@
     <!-- MAIN CONTENT -->
     <main>
         <div class="content-wrapper">
+            <!-- LOGO LINGKARAN (DI ATAS PADA MOBILE) -->
+            <div class="center-logo" onclick="openModal('JRI MUNAWAR GROUP')">
+                <img src="WhatsApp Image 2026-03-04 at 16.57.28.jpeg" alt="Logo JRI">
+            </div>
+
             <!-- KOTAK-KOTAK (GRID) -->
             <div class="grid-wrapper">
                 <div class="card" onclick="openModal('UNEVRAS')">
@@ -281,11 +293,6 @@
                 <div class="card" onclick="openModal('GARTARA')">
                     <img src="ChatGPT Image 29 Mar 2026, 16.25.26.png" alt="Gartara">
                 </div>
-            </div>
-
-            <!-- LOGO LINGKARAN (FIX DI TENGAH) -->
-            <div class="center-logo" onclick="openModal('JRI MUNAWAR GROUP')">
-                <img src="WhatsApp Image 2026-03-04 at 16.57.28.jpeg" alt="Logo JRI">
             </div>
         </div>
     </main>
